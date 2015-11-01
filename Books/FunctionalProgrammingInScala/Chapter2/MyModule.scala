@@ -27,6 +27,30 @@ object MyModule {
       msg.format(x, abs(x))
     }
 
+    private def formatFactorial (n : Int) = {
+      val msg = "The factorial of %d is %d"
+      msg.format(n, factorial(n))
+    }
+
+    def formatResult (name: String, n: Int, f: Int => Int): String = {
+      val msg = "The %s of %d is %d"
+      msg.format(name, n, f(n))
+    }
+
+    def isSorted[A](as: Array[A], ordered: (A,A) => Boolean): Boolean = {
+      @annotation.tailrec
+      def loop(a: Int, b: Int, fun: (A,A) => Boolean) : Boolean = {
+        if (b >= as.length) true
+        else if (fun(as(a),as(b)) == false) false
+        else loop (b, b + 1, fun)
+      }
+      loop (0,1,ordered)
+    }
+
+    def compose[A,B,C](f: B => C, g: A => B): A => C = {
+        a => f(g(a))
+    }
+
     def main (args: Array[String]): Unit = {
       println(formatAbs(-42))
     }
