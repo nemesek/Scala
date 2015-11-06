@@ -36,8 +36,26 @@ object List {
   }
 
   // Exercise 3.4
-  def drop[A](l: List[A], n: Int): List[A] = l match {
-    case Nil => Nil
-    case Cons(_, xs) => if (n > 0) drop(xs, n-1) else l
+  def drop[A](l: List[A], n: Int): List[A] =
+    l match {
+      case Nil => Nil
+      case Cons(_, xs) => if (n > 0) drop(xs, n-1) else l
   }
+
+  // Exercise 3.5
+  // test: List.dropWhile(l, (x:Int) => x < 4) // l = List(1,2,3,4,5,6)
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = 
+    l match {
+      case Nil => Nil
+      case Cons(x,xs) => if (f(x)) dropWhile(xs, f) else l
+  }
+
+  // Exercise 3.6
+  // test int(List(1,2,3,4))
+  def init[A](l: List[A]): List[A] =
+    l match {
+      case Nil => sys.error("init of empty list")
+      case Cons(_,Nil) => Nil
+      case Cons(h,t) => Cons(h,init(t))
+    }
 }
