@@ -44,7 +44,7 @@ object List {
 
   // Exercise 3.5
   // test: List.dropWhile(l, (x:Int) => x < 4) // l = List(1,2,3,4,5,6)
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = 
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] =
     l match {
       case Nil => Nil
       case Cons(x,xs) => if (f(x)) dropWhile(xs, f) else l
@@ -58,4 +58,22 @@ object List {
       case Cons(_,Nil) => Nil
       case Cons(h,t) => Cons(h,init(t))
     }
+
+  def foldRight[A,B](as: List[A], z: B)(f: (A,B) => B) : B =
+    as match {
+      case Nil => z
+      case Cons(x,xs) => f(x, foldRight(xs, z)(f))
+  }
+
+  // foldRight(List(1,2,3), 0)(f)
+  // f(1, foldRight(List(2,3), 0) (f))
+  // f(1, f(2, foldRight(List(3), 0) (f)))
+  // f(1, f(2, f(3, foldRight(Nil, 0) (f))))
+  // f(1, f(2, f(3, 0))) == f(1, f(2, 3 + 0))
+  // f(1, f(2, 3)) == f(1, 2 + 3)
+  // f(1, 5) == 1 + 5
+  // 6
+  def sum2(ns: List[Int]) = foldRight(ns, 0)((x,y) => x + y)
+
+  def product2(ns: List[Int]) = foldRight(ns, 1)(_ * _)
 }
