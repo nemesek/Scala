@@ -65,6 +65,8 @@ object List {
       case Cons(x,xs) => f(x, foldRight(xs, z)(f))
   }
 
+
+
   // foldRight(List(1,2,3), 0)(f)
   // f(1, foldRight(List(2,3), 0) (f))
   // f(1, f(2, foldRight(List(3), 0) (f)))
@@ -73,7 +75,41 @@ object List {
   // f(1, f(2, 3)) == f(1, 2 + 3)
   // f(1, 5) == 1 + 5
   // 6
+
+  // 1 + (foldRight(List(2,3), 0))
+  // 1 + (2 + (foldRight(List(3), 0)))
+  // 1 + (2 + (3 + (foldRight(Nil, 0))))
+  // 1 + (2 + (3 + (0)))
+  // 1 + (2 + (3 + 0))
+  // 1 + (2 + 3)
+  // 1 + 5
+
+  @annotation.tailrec
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B =
+    l match {
+      case Nil => z
+      case Cons(h,t) => foldLeft(t, f(z,h))(f)
+  }
+
+  // foldLeft(List(4,5,6), 0)(+)
+  // foldLeft(List(5,6), (0 + 4))
+  // foldLeft(List(6), (5 + 4))
+  // foldLeft(Nil, (6 + 9)) = 15
+
+  // ((0 + 4) + 5) + 6 == 15
+  // foldLeft(List(4,5,6), 0)(+)
+  // foldLeft(List(5,6), (0 + 4))
+  // foldLeft(List(6), ((0 + 4) + 5))
+  // foldLeft(Nil, (((0 + 4) + 5) +6))
+  // ((0 + 4) + 5) + 6
+  // (4 + 5) + 6
+  // 9 + 6 == 15
+
+
   def sum2(ns: List[Int]) = foldRight(ns, 0)((x,y) => x + y)
 
+  // (_ * _) is concise for (x,y) => x * y
   def product2(ns: List[Int]) = foldRight(ns, 1)(_ * _)
+
+  def sum3(ns: List[Int]) = foldLeft(ns, 0)(_ + _)
 }
